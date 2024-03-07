@@ -5,8 +5,8 @@
   tasks:  # Added hyphen before "tasks"
     - name: Deploy Pod
       shell: |
-        kubectl apply -f deployment.yml
+        kubectl apply -f deployment.yaml
 
     - name: Deploy Service
       shell: |
-        kubectl apply -f pod.yml
+        kubectl apply -f pod.yaml
