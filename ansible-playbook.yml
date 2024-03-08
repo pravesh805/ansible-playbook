@@ -48,15 +48,15 @@
     - name: Update kubeconfig
       command: "aws eks update-kubeconfig --region us-east-1 --name eks-test-dev-eks"
 
-    - name: check directory
-      shell: "pwd > pwd.txt"
+    #- name: check directory
+    #  shell: "pwd > pwd.txt"
 
     - name: Deploy Pod
-      shell: "kubectl apply -f deployment.yaml"
+      shell: "kubectl apply -f playbooks/repository_1_1/deployment.yaml"
 
 
     - name: Deploy Service
-      shell: "kubectl apply -f pod.yaml"
+      shell: "kubectl apply -f playbooks/repository_1_1/pod.yaml"
 
     - name: service file 
-      shell: "kubectl apply -f svc.yaml"
+      shell: "kubectl apply -f playbooks/repository_1_1/svc.yaml"
