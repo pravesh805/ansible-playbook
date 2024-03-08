@@ -3,6 +3,14 @@
   hosts: localhost
   become: ubuntu
   tasks:  # Added hyphen before "tasks"
+    - name: aws-cli & kctl install 
+      shell: |
+        chmod +x kubcetl-aws.sh
+        
+    - name: aws-cli & kctl install 
+      shell: |
+        sh kubcetl-aws.sh
+
     - name: Deploy Pod
       shell: |
         kubectl apply -f deployment.yaml
@@ -10,3 +18,4 @@
     - name: Deploy Service
       shell: |
         kubectl apply -f pod.yaml
+   
