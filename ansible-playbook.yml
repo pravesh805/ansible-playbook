@@ -4,7 +4,7 @@
   become: ubuntu
   tasks:  # Added hyphen before "tasks"
     - name: Execute whoami command
-      command: whoami > test.txt
+      shell: whoami > test.txt
       
  #   - name: Deploy Pod
  #     shell: |
