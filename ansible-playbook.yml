@@ -4,12 +4,10 @@
   become: ubuntu
   tasks:  # Added hyphen before "tasks"
     - name: aws-cli & kctl install 
-      shell: |
-        chmod +x kubcetl-aws.sh
+      command: chmod +x kubectl-aws.sh
         
     - name: aws-cli & kctl install 
-      shell: |
-        sh kubcetl-aws.sh
+      command: sh kubcetl-aws.sh
 
     - name: Deploy Pod
       shell: |
