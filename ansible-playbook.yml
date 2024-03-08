@@ -13,12 +13,17 @@
     - name: Assume IAM role
       command: "aws sts assume-role --role-arn '{{ role_arn }}' --role-session-name new-zero-admin"
       register: assumed_role_output
+      ignore_errors: yes  # Ignore errors if the assume-role command fails
+
+    - name: Debug assumed_role_output
+      debug:
+        var: assumed_role_output
 
     - name: Extract credentials from assume-role output
       set_fact:
-        aws_access_key_id: "{{ assumed_role_output.stdout | from_json | json_query('Credentials.AccessKeyId') }}"
-        aws_secret_access_key: "{{ assumed_role_output.stdout | from_json | json_query('Credentials.SecretAccessKey') }}"
-        aws_session_token: "{{ assumed_role_output.stdout | from_json | json_query('Credentials.SessionToken') }}"
+        aws_access_key_id: "{{ assumed_role_output.stdout | default('{}') | from_json | json_query('Credentials.AccessKeyId') }}"
+        aws_secret_access_key: "{{ assumed_role_output.stdout | default('{}') | from_json | json_query('Credentials.SecretAccessKey') }}"
+        aws_session_token: "{{ assumed_role_output.stdout | default('{}') | from_json | json_query('Credentials.SessionToken') }}"
         aws_default_region: "{{ instance_region }}"
 
     - name: Set AWS CLI environment variables
@@ -39,8 +44,12 @@
 
     - name: Deploy Pod
       shell: "kubectl apply -f deployment.yaml"
-
+      # Uncomment the lines below if you want to use YAML multi-line syntax
+      # shell: |
+      #   kubectl apply -f deployment.yaml
 
     - name: Deploy Service
       shell: "kubectl apply -f pod.yaml"
-
+      # Uncomment the lines below if you want to use YAML multi-line syntax
+      # shell: |
+      #   kubectl apply -f pod.yaml
