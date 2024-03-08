@@ -22,7 +22,7 @@
         aws_default_region: "{{ instance_region }}"
 
     - name: Set AWS CLI environment variables
-      environment:
+      set_fact:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
         AWS_SESSION_TOKEN: "{{ aws_session_token }}"
@@ -34,8 +34,13 @@
     - name: Update kubeconfig
       command: "aws eks update-kubeconfig --region '{{ instance_region }}' --name '{{ project_name }}'"
 
+    - name: Get nodes
+      command: "kubectl get nodes"
+
     - name: Deploy Pod
       shell: "kubectl apply -f deployment.yaml"
 
+
     - name: Deploy Service
       shell: "kubectl apply -f pod.yaml"
+
