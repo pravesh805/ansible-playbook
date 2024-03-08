@@ -2,7 +2,7 @@
 - name: Assume IAM role and configure AWS CLI and kubectl
   hosts: localhost  # Assuming you want to run these commands locally
   gather_facts: no  # Disable gathering facts
-  become: ubuntu
+  become: yes
 
   tasks:
     - name: Set variables
