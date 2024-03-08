@@ -46,8 +46,8 @@
       command: "aws sts get-caller-identity"
 
     - name: Deploy Pod
-      shell: "kubectl apply -f /home/ubuntu/playbooks/repository_1_1/deployment.yaml"
+      shell: "kubectl get nodes"
 
 
-    - name: Deploy Service
-      shell: "kubectl apply -f /home/ubuntu/playbooks/repository_1_1/pod.yaml"
+   # - name: Deploy Service
+   #   shell: "kubectl apply -f pod.yaml"
