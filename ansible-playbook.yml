@@ -11,8 +11,13 @@
         project_name: "eks-test-dev-eks"
         instance_region: "us-east-1"
         
-    - name: kubectl install
-      command: "sudo apt-get install -y kubectl"
+    - name: Install kubectl version 1.29
+      shell: |
+        echo "Installing kubectl version 1.29..."
+        sudo curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.29.0/bin/linux/amd64/kubectl"
+        sudo chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/kubectl
+        echo "kubectl version 1.29 installed successfully."
 
     - name: Assume IAM role
       command: "aws sts assume-role --role-arn '{{ role_arn }}' --role-session-name new-zero-admin"
