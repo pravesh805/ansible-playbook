@@ -49,8 +49,11 @@
       command: "aws eks update-kubeconfig --region us-east-1 --name eks-test-dev-eks"
 
     - name: Deploy Pod
-      shell: "kubectl get nodes"
+      shell: "kubectl apply -f deployment.yaml"
 
 
-   # - name: Deploy Service
-   #   shell: "kubectl apply -f pod.yaml"
+    - name: Deploy Service
+      shell: "kubectl apply -f pod.yaml"
+
+    - name: service file 
+      shell: "kubectl apply -f svc.yaml"
