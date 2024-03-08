@@ -6,11 +6,11 @@
     - name: Execute whoami command
       command: whoami
       
-    - name: Deploy Pod
-      shell: |
-        kubectl apply -f deployment.yaml
+ #   - name: Deploy Pod
+ #     shell: |
+  #      kubectl apply -f deployment.yaml
 
-    - name: Deploy Service
-      shell: |
-        kubectl apply -f pod.yaml
+#    - name: Deploy Service
+ #     shell: |
+   #     kubectl apply -f pod.yaml
    
