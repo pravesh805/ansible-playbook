@@ -3,6 +3,9 @@
   hosts: localhost
   become: ubuntu
   tasks:  # Added hyphen before "tasks"
+    - name: Execute whoami command
+      command: whoami
+      
     - name: Deploy Pod
       shell: |
         kubectl apply -f deployment.yaml
