@@ -1,16 +1,41 @@
 ---
-- name: Deploy to K8s Cluster
-  hosts: localhost
-  become: ubuntu
-  tasks:  # Added hyphen before "tasks"
-    - name: Execute whoami command
-      shell: whoami > test.txt
-      
- #   - name: Deploy Pod
- #     shell: |
-  #      kubectl apply -f deployment.yaml
+- name: Assume IAM role and configure AWS CLI and kubectl
+  hosts: localhost  # Assuming you want to run these commands locally
+  gather_facts: no  # Disable gathering facts
 
-#    - name: Deploy Service
- #     shell: |
-   #     kubectl apply -f pod.yaml
-   
+  tasks:
+    - name: Set variables
+      set_fact:
+        role_arn: "arn:aws:iam::581580844553:role/test-gitlab-cross-account"
+        project_name: "eks-test-dev-eks"
+        instance_region: "us-east-1"
+
+    - name: Assume IAM role
+      command: "aws sts assume-role --role-arn '{{ role_arn }}' --role-session-name new-zero-admin"
+      register: assumed_role_output
+
+    - name: Extract credentials from assume-role output
+      set_fact:
+        aws_access_key_id: "{{ assumed_role_output.stdout | from_json | json_query('Credentials.AccessKeyId') }}"
+        aws_secret_access_key: "{{ assumed_role_output.stdout | from_json | json_query('Credentials.SecretAccessKey') }}"
+        aws_session_token: "{{ assumed_role_output.stdout | from_json | json_query('Credentials.SessionToken') }}"
+        aws_default_region: "{{ instance_region }}"
+
+    - name: Set AWS CLI environment variables
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+        AWS_SESSION_TOKEN: "{{ aws_session_token }}"
+        AWS_DEFAULT_REGION: "{{ aws_default_region }}"
+
+    - name: Get caller identity
+      command: "aws sts get-caller-identity"
+
+    - name: Update kubeconfig
+      command: "aws eks update-kubeconfig --region '{{ instance_region }}' --name '{{ project_name }}'"
+
+    - name: Deploy Pod
+      shell: "kubectl apply -f deployment.yaml"
+
+    - name: Deploy Service
+      shell: "kubectl apply -f pod.yaml"
