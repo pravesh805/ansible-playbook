@@ -37,19 +37,14 @@
       command: "aws sts get-caller-identity"
 
     - name: Update kubeconfig
-      command: "aws eks update-kubeconfig --region '{{ instance_region }}' --name '{{ project_name }}'"
+      command: "aws eks update-kubeconfig --region us-east-1 --name eks-test-dev-eks
 
     - name: Get nodes
       command: "kubectl get nodes"
 
     - name: Deploy Pod
       shell: "kubectl apply -f deployment.yaml"
-      # Uncomment the lines below if you want to use YAML multi-line syntax
-      # shell: |
-      #   kubectl apply -f deployment.yaml
+
 
     - name: Deploy Service
       shell: "kubectl apply -f pod.yaml"
-      # Uncomment the lines below if you want to use YAML multi-line syntax
-      # shell: |
-      #   kubectl apply -f pod.yaml
